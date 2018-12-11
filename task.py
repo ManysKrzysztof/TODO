@@ -12,7 +12,7 @@ def AddRowForTask(window, text, name,save):
     checkbox.pack(side="left")
     label.pack(side="left")
     deletebtn = Button(frame, text="usuń", name=name + "deletebtn", command=lambda: DeleteTask(window, frame))
-    editbtn = Button(frame, text="edytuj", name=name+"editbtn", command=lambda: EditTask(window,frame,label,deletebtn,editbtn))
+    editbtn = Button(frame, text="edytuj", name=name+"editbtn", command=lambda: EditTask(window,frame,label,deletebtn,editbtn,checkbox))
     editbtn.pack(side="left")
     deletebtn.pack(side="left")
 
@@ -20,6 +20,7 @@ def PrepareTask(window, entry):
     global lineCount
     save = open("save.txt", "ab+")
     AddRowForTask(window, entry.get(), str(lineCount),save)
+    entry.delete(0,'end')
     lineCount += 1
     window.update()
 
@@ -40,25 +41,30 @@ def DeleteTask(window,frame):
     frame.destroy()
     window.update()
 
-def EditTask(window,frame,label,deletebtn,editbtn):
+def EditTask(window,frame,label,deletebtn,editbtn,checkbox):
     entry1 = Entry(frame)
     entry1.insert(END,label["text"])
-    deletebtn.pack_forget()
     editbtn.pack_forget()
     entry1.pack(side="left")
     label.pack_forget()
     window.update()
-    finbtn = Button(frame, text="Akceptuj", command=lambda: EntryToLabel(label,entry1,window,finbtn,deletebtn,editbtn))
-    finbtn.pack(side="left")
+    checkbox.pack_forget()
+    AcBtn = Button(frame,text="akceptuj ",command=lambda:  EntryToLabel(frame,label, entry1, window, deletebtn, editbtn,AcBtn,checkbox))
+    AcBtn.pack()
 
-def EntryToLabel(label, entry1, window, finbtn,deletebtn,editbtn):
-    label.config(text=entry1.get())
-    label.pack(side="left")
-    editbtn.pack(side="left")
-    deletebtn.pack(side="left")
-    entry1.pack_forget()
-    finbtn.pack_forget()
+
+def EntryToLabel(frame,label, entry1, window,deletebtn,editbtn,AcBtn,checkbox):
+    AcBtn.pack_forget()
+    deletebtn.pack_forget()
+    window.update()
+    if entry1.get() is "":
+        DeleteTask(window,frame)
+    else:
+        checkbox.pack(side="left")
+        label.config(text=entry1.get())
+        label.pack(side="left")
+        editbtn.pack(side="left")
+        deletebtn.pack(side="left")
+        entry1.pack_forget()
     window.update()
 
-def Run(window):
-    window.update()
