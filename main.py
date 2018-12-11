@@ -1,6 +1,7 @@
 from task import *
 from scrollable import *
 
+
 window = Tk()
 window.geometry("400x400+0+0")
 window.resizable(False, False)
